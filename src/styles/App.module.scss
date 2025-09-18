@@ -1,0 +1,144 @@
+@import './variables';
+
+.wrapper {
+    max-width: 1400px;
+    padding: 0 30px;
+    margin: 0 auto;
+}
+
+.mySwiper {
+    
+}
+
+.switch_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.switch_buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.switch_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #42567A;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.switch_numbers {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.activeIndex {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.year {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 25px;
+    line-height: 29px;
+    color: $blue-color;
+}
+
+.events {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    margin-top: 60px;
+    position: relative;
+}
+
+.events_btn {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 15px rgba(56, 119, 238, 0.1);
+
+    img {
+        width: 5px;
+        height: 10px;
+    }
+}
+
+.events_btn__prev {
+    transform: rotate(-180deg);
+}
+
+
+.circle_wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.circle {
+  position: relative;
+  border: 1px solid rgb(66, 86, 122, 0.5);
+  border-radius: 50%;
+}
+
+.circle_item__wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  cursor: pointer;
+}
+
+.circle_item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: $primary-color;
+  border: 1px solid rgb(66, 86, 122, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.circle_item__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: $primary-color;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.circle_item__wrapper:hover .circle_item {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+}
+
+
+.circle_item__wrapper:hover .circle_item__content {
+  opacity: 1;
+}
