@@ -60,16 +60,60 @@ function App() {
     itemRefs.current.forEach((el, i) => {
       if (!el) return;
 
-      const angle = (i / n) * 2 * Math.PI;
-      const x = centerX + radius * Math.cos(angle) - el.offsetWidth / 2;
-      const y = centerY + radius * Math.sin(angle) - el.offsetHeight / 2;
+      const angle = (i / n) * 360;
+      const rad = (angle * Math.PI) / 180;
 
-      gsap.set(el, { x, y }); 
+      const x = centerX + radius * Math.cos(rad) - el.offsetWidth / 2;
+      const y = centerY + radius * Math.sin(rad) - el.offsetHeight / 2;
+
+      gsap.set(el, { x, y, rotate: 0 }); // начальная позиция, элементы вертикальны
     });
-  }, [data, radius]);
+  }, []);
+
+  useEffect(() => {
+    rotateCircle(activeIndex);
+  }, [activeIndex]);
+
+  const rotateCircle = (index: number) => {
+    const n = data.length;
+    const anglePerItem = 360 / n;
+    const targetRotate = -anglePerItem * index + 270;
+
+    if (!containerRef.current) return;
+
+    // текущее вращение контейнера
+    const currentRotate = gsap.getProperty(containerRef.current, 'rotate') as number;
+
+    // разница углов
+    let delta = targetRotate - currentRotate;
+
+    // для кратчайшего пути
+    if (delta > 180) delta -= 360;
+    if (delta < -180) delta += 360;
+
+    const speed = 180; // градусы в секунду, можно менять
+    const duration = Math.abs(delta) / speed;
+
+    gsap.to(containerRef.current, {
+      rotate: targetRotate,
+      duration: duration,
+      ease: 'power2.out',
+    });
+
+    // компенсируем наклон элементов
+    itemRefs.current.forEach(el => {
+      if (!el) return;
+      gsap.to(el, {
+        rotate: -targetRotate,
+        duration: duration,
+        ease: 'power2.out',
+      });
+    });
+  };
+
   
   const fadeSwitch = (newIndex: number) => {
-    if (!contentRef.current || !containerRef.current) return;
+    if (!contentRef.current) return;
 
     gsap.to(contentRef.current, {
       opacity: 0,
@@ -77,17 +121,9 @@ function App() {
       onComplete: () => {
         setActiveIndex(newIndex);
         contentSwiperRef?.current?.slideTo(0);
-        gsap.fromTo(
-          contentRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.3 }
-        );
+        gsap.fromTo(contentRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3 });
       },
     });
-
-    gsap.to(containerRef.current, {
-      rotate: 10
-    })
   };
 
 
