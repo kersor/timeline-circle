@@ -29,7 +29,6 @@ const Circle = ({
     const prevMin = useRef({ val: 0 });
     const prevMax = useRef({ val: 0 });
 
-    // Анимация для min
     useEffect(() => {
         if (!minRef.current) return;
         gsap.to(prevMin.current, {
@@ -43,7 +42,6 @@ const Circle = ({
         });
     }, [date.min]);
     
-    // Анимация для max
     useEffect(() => {
         if (!maxRef.current) return;
         gsap.to(prevMax.current, {
@@ -64,14 +62,15 @@ const Circle = ({
                     <div 
                     key={i} ref={(el) => {if (el) itemRefs.current[i] = el}} 
                     className={
-                        clsx(styles.circle_item__wrapper, activeIndex === i && styles.circle_item__wrapper__active)
+                        clsx(styles.circle_item__wrapper, 
+                        activeIndex === i && styles.circle_item__wrapper__active)
                     }
                     onClick={() => handleNextAndPrev(i)}
                     >
-                    <div className={styles.circle_item__border}></div> 
-                    <div className={styles.circle_item}></div>           {/* фон */}
-                    <div className={styles.circle_item__content_number}>{++i}</div>
-                    <div className={styles.circle_item__content_theme}>{item.theme}</div>
+                        <div className={styles.circle_item__border}></div> 
+                        <div className={styles.circle_item}></div>           {/* фон */}
+                        <div className={styles.circle_item__content_number}>{++i}</div>
+                        <div className={styles.circle_item__content_theme}>{item.theme}</div>
                     </div>
                 ))}
                 </div>

@@ -3,13 +3,14 @@ import styles from './styles/App.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper'; 
 
-import { data } from './constants/swiper';
+import { dataInfo } from './constants/swiper';
 import gsap from 'gsap';
 import Circle from './components/circle/Circle';
 import { SwitchButtons } from './components/switchButtons/SwitchButtons';
 import { SwiperComponent } from './components/swiper/SwiperComponent';
 import { Container } from './components/container/Container';
 import { PageTitle } from './components/pageTitle/PageTitle';
+import { IData, ITheme } from './types/swiper';
 
 const radius = 265
 
@@ -19,20 +20,24 @@ export interface IBeginAndIsEndEvent {
 }
 
 function App() {
+  const [data, setData] = useState<ITheme[]>([])
+
   const contentRef = useRef<HTMLDivElement>(null);
   const contentSwiperRef = useRef<SwiperType | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<HTMLDivElement[]>([]);
 
   const [isBeginAndIsEndEvent, setIsBeginAndIsEndEvent] = useState<IBeginAndIsEndEvent>({
     isEnd: false,
     isBegin: true
   })
-
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-
   const [date, setDate] = useState({
     min: 0,
     max: 0
   })
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+
 
   const handlePrev = () => {
     if (activeIndex > 0) fadeSwitch(activeIndex - 1);
@@ -46,10 +51,24 @@ function App() {
     fadeSwitch(--index);
   };
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<HTMLDivElement[]>([]);
+
 
   useEffect(() => {
+    if (!!dataInfo.length) {
+      const dta = dataInfo.map((value: ITheme) => {
+        return {
+          theme: value.theme,
+          data: value.data.sort((a: IData, b: IData) => a.year - b.year) 
+        }
+      })
+
+      setData(dta)
+    }
+  }, [dataInfo])
+
+  useEffect(() => {
+    if (!data.length) return
+
     const n = data.length;
     const centerX = radius;
     const centerY = radius;
@@ -65,11 +84,12 @@ function App() {
 
       gsap.set(el, { x, y, rotate: 0 }); 
     });
-  }, []);
+  }, [data]);
 
   useEffect(() => {
+    if (!data.length) return
     rotateCircle(activeIndex);
-  }, [activeIndex]);
+  }, [activeIndex, data]);
 
   const rotateCircle = (index: number) => {
     const n = data.length;
@@ -78,22 +98,20 @@ function App() {
 
     if (!containerRef.current) return;
 
-    // текущее вращение контейнера
     const currentRotate = gsap.getProperty(containerRef.current, 'rotate') as number;
 
-    // разница углов
     let delta = targetRotate - currentRotate;
 
-    // для кратчайшего пути
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
 
-    const speed = 180; // градусы в секунду, можно менять
+    const speed = 180;
     const duration = Math.abs(delta) / speed;
+
     setDate(prev => ({
       ...prev,
-      max: data[index].data[0].year,
-      min: data[index].data[data[index].data.length - 1].year,
+      min: data[index].data[0].year,
+      max: data[index].data[data[index].data.length - 1].year,
     }))
     
     gsap.to(containerRef.current, {
@@ -102,7 +120,6 @@ function App() {
       ease: 'power2.out',
     });
 
-    // компенсируем наклон элементов
     itemRefs.current.forEach(el => {
       if (!el) return;
       gsap.to(el, {
@@ -127,6 +144,8 @@ function App() {
       },
     });
   };
+
+  if (!data.length) return null
 
   return (
     <div className={styles.wrapper}>
