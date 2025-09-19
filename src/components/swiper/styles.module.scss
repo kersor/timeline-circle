@@ -1,0 +1,49 @@
+@import "../../styles/variables";
+
+.mySwiper_wrapper {
+    max-width: 1200px;
+    width: 100%;
+}
+
+.activeIndex {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.year {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 25px;
+    line-height: 29px;
+    color: $blue-color;
+}
+
+.events {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    margin-top: 60px;
+    position: relative;
+}
+
+.events_btn {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 15px rgba(56, 119, 238, 0.1);
+
+    img {
+        width: 5px;
+        height: 10px;
+    }
+}
+
+.events_btn__prev {
+    transform: rotate(-180deg);
+}

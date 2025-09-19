@@ -1,41 +1,38 @@
-import logo from './logo.svg';
 import styles from './styles/App.module.scss';
 
 import React, { useEffect, useRef, useState } from 'react';
-// Import Swiper React components
-import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
-import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper'; 
 
-import './styles/App.scss'
-import 'swiper/css';
-import 'swiper/css/free-mode';
-import 'swiper/css/navigation';
-import 'swiper/css/thumbs';
 import { data } from './constants/swiper';
-import { IData, ITheme } from './types/swiper';
 import gsap from 'gsap';
-import clsx from 'clsx'
+import Circle from './components/circle/Circle';
+import { SwitchButtons } from './components/switchButtons/SwitchButtons';
+import { SwiperComponent } from './components/swiper/SwiperComponent';
+import { Container } from './components/container/Container';
+import { PageTitle } from './components/pageTitle/PageTitle';
 
-const radius = 215
+const radius = 265
+
+export interface IBeginAndIsEndEvent {
+  isEnd: boolean
+  isBegin: boolean
+}
 
 function App() {
   const contentRef = useRef<HTMLDivElement>(null);
   const contentSwiperRef = useRef<SwiperType | null>(null)
 
-  const [isBeginAndIsEndEvent, setIsBeginAndIsEndEvent] = useState<{isEnd: boolean, isBegin: boolean}>({
+  const [isBeginAndIsEndEvent, setIsBeginAndIsEndEvent] = useState<IBeginAndIsEndEvent>({
     isEnd: false,
     isBegin: true
   })
-  const eventPrevRef = useRef<HTMLDivElement>(null);
-  const eventNextRef = useRef<HTMLDivElement>(null);
 
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [displayIndex, setDisplayIndex] = useState(0);
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
-
- 
+  const [date, setDate] = useState({
+    min: 0,
+    max: 0
+  })
 
   const handlePrev = () => {
     if (activeIndex > 0) fadeSwitch(activeIndex - 1);
@@ -66,7 +63,7 @@ function App() {
       const x = centerX + radius * Math.cos(rad) - el.offsetWidth / 2;
       const y = centerY + radius * Math.sin(rad) - el.offsetHeight / 2;
 
-      gsap.set(el, { x, y, rotate: 0 }); // начальная позиция, элементы вертикальны
+      gsap.set(el, { x, y, rotate: 0 }); 
     });
   }, []);
 
@@ -93,7 +90,12 @@ function App() {
 
     const speed = 180; // градусы в секунду, можно менять
     const duration = Math.abs(delta) / speed;
-
+    setDate(prev => ({
+      ...prev,
+      max: data[index].data[0].year,
+      min: data[index].data[data[index].data.length - 1].year,
+    }))
+    
     gsap.to(containerRef.current, {
       rotate: targetRotate,
       duration: duration,
@@ -126,77 +128,37 @@ function App() {
     });
   };
 
-
   return (
     <div className={styles.wrapper}>
-      <div className={styles.circle_wrapper}>
-        <div className={styles.circle} ref={containerRef} style={{ width: radius * 2, height: radius * 2}}>
-          {data.map((item, i) => (
-            <div 
-              key={i} ref={(el) => {if (el) itemRefs.current[i] = el}} 
-              className={
-                clsx(styles.circle_item__wrapper, activeIndex === i && styles.circle_item__wrapper__active)
-              }
-              onClick={() => handleNextAndPrev(i)}
-            >
-              <div className={styles.circle_item__border}></div> 
-              <div className={styles.circle_item}></div>           {/* фон */}
-              <div className={styles.circle_item__content_number}>{++i}</div>
-              <div className={styles.circle_item__content_theme}>{item.theme}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <Container style={{position: "relative", paddingTop: `calc(170 / 1080 * 100vh)`}}>
+        <PageTitle />
+        <Circle 
+          data={data}  
+          radius={radius} 
+          activeIndex={activeIndex} 
+          date={date} 
+          handleNextAndPrev={handleNextAndPrev}
+          itemRefs={itemRefs}
+          containerRef={containerRef}
+        />
 
-      <div className={styles.switch_wrapper}>
-        <div className={styles.switch_numbers}>0{activeIndex + 1}/0{data.length}</div>
-        <div className={styles.switch_buttons}>
-          <div onClick={handlePrev} className={styles.switch_button}>
-            <img src="/icons/left_arrow.svg" alt="" />
-          </div>
-          <div onClick={handleNext} className={styles.switch_button}>
-            <img src="/icons/right_arrow.svg" alt="" />
-          </div>
-        </div>
-      </div>
-      <div className={styles.events} ref={contentRef}>
-        <Swiper  
-          onSwiper={(swiper: SwiperType) => (contentSwiperRef.current = swiper)}
-          onSlideChange={(swiper: SwiperType) => {
-            const start = swiper.activeIndex === 0
-            const end = swiper.activeIndex === data[activeIndex].data.length - 1
-            setIsBeginAndIsEndEvent(prev => ({...prev, isBegin: start , isEnd: end}))
-          }}
-          navigation={{
-            prevEl: '.swiper-button-prev-custom',
-            nextEl: '.swiper-button-next-custom',
-          }}
-          spaceBetween={80}
-          slidesPerView={3}
-          freeMode={true}
-          watchSlidesProgress={true}
-          modules={[FreeMode, Navigation, Thumbs]}
-          className={styles.mySwiper}
-        >
-          {
-            data[activeIndex].data.map((dta: IData) => (
-              <SwiperSlide>
-                <div  className={styles.activeIndex}>
-                  <div className={styles.year}>{dta.year}</div>
-                  <div className={styles.description}>{dta.description}</div>
-                </div>
-              </SwiperSlide>
-            ))
-          }
+        <SwitchButtons 
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+          activeIndex={activeIndex}
+          dataLen={data.length}
+        />
 
-        </Swiper>
-        <div ref={eventPrevRef} className={`swiper-button-prev-custom ${isBeginAndIsEndEvent.isBegin && "disabled"}`}>
-          <img src="/icons/arrow_blue.svg" alt="" />
-        </div>
-        <div ref={eventNextRef} className={`swiper-button-next-custom ${isBeginAndIsEndEvent.isEnd && "disabled"}`}>
-          <img src="/icons/arrow_blue.svg" alt="" />
-        </div>
-      </div>
+        <SwiperComponent
+          data={data[activeIndex].data}
+          contentRef={contentRef}
+          contentSwiperRef={contentSwiperRef}
+          isBeginAndIsEndEvent={isBeginAndIsEndEvent}
+          setIsBeginAndIsEndEvent={setIsBeginAndIsEndEvent}
+        />
+        <div className={styles.line_vertical}></div>
+        <div className={styles.line_horizontal}></div>
+      </Container>
     </div>
   );
 }

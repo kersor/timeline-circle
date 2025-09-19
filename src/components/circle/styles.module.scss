@@ -1,0 +1,129 @@
+@import "../../styles/variables";
+
+.circle_wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.circle {
+  position: relative;
+  border: 1px solid rgb(66, 86, 122, 0.2);
+  border-radius: 50%;
+}
+
+
+.circle_item__wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  cursor: pointer;
+
+}
+
+.circle_item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: $primary-color;
+  border: 1px solid rgb(66, 86, 122, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.circle_item__content_number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  line-height: 30px;
+  color: $primary-color;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+
+
+.circle_item__wrapper:hover .circle_item {
+  width: 60px;
+  height: 60px;
+  background: $white-color;
+}
+
+
+.circle_item__wrapper:hover .circle_item__content_number {
+  opacity: 1;
+}
+
+
+
+.circle_item__wrapper__active {
+  .circle_item {
+    width: 60px;
+    height: 60px;
+    background:   $white-color;
+  }
+  .circle_item__content_number {
+    opacity: 1;
+  }
+
+  .circle_item__content_theme {
+    display: block;
+    position: absolute;
+    left: 50px;
+    top: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 700;
+  }
+}
+
+.circle_item__content_theme {
+  display: none;
+}
+
+.date_wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  z-index: -1;
+}
+
+.date {
+  display: flex;
+  gap: 6 0px;
+}
+
+.date_min,
+.date_max {
+  font-size: 200px;
+  font-weight: 700;
+  line-height: 160px;
+}
+
+.date_min {
+  color: $blue-color;
+}
+
+.date_max {
+  color: $pink-color;
+}
