@@ -1,0 +1,73 @@
+@import "../../styles/variables";
+
+.date_wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  z-index: -1;
+}
+
+.date {
+  display: flex;
+  gap: 60px;
+}
+
+.date_min,
+.date_max {
+  font-size: 200px;
+  font-weight: 700;
+  line-height: 160px;
+}
+
+.date_min {
+  color: $blue-color;
+}
+
+.date_max {
+  color: $pink-color;
+}
+
+
+@media (max-width: 1050px) {
+  .date_min,
+  .date_max {
+    font-size: 150px;
+  }
+}
+
+@media (max-width: 800px) {
+  .date_min,
+  .date_max {
+    font-size: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  .date {
+    gap: 20px;
+  }
+  .date_wrapper {
+    top: 30%;
+  }
+}
+
+@media (max-width: 550px) {
+  .date_min,
+  .date_max {
+    font-size: 76px;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .date_min,
+  .date_max {
+    font-size: 56px;
+  }
+  .date_wrapper {
+    left: 0;
+    transform: translateY(-50%) translateX(20px);
+  }
+
+}

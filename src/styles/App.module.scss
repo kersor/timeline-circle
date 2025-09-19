@@ -1,10 +1,9 @@
 @import './variables';
 
 .wrapper {
-    max-width: 1400px;
     padding: 0 30px;
-    margin: 0 auto;
     height: 100vh;
+    width: 100%;
 }
 
 
@@ -29,4 +28,21 @@
     transform: translateY(50%);
     background: rgb(66, 86, 122, 0.2);
     z-index: -1;
+}
+
+.section_bottom {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 600px) {
+    .wrapper {
+        padding: 0;
+    }
+    .section_bottom {
+        flex-direction: column-reverse;
+        margin-top: calc(50% + 60px);
+        padding-top: 20px;
+        border-top: 1px solid #C7CDD9;
+    }
 }

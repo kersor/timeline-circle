@@ -1,19 +1,20 @@
-import React, { RefObject, useRef, useState } from 'react'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 import './styles.scss'
 import styles from './styles.module.scss'
 
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
-import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
+import { FreeMode, Navigation, Pagination, Thumbs } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper'; 
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 import { IData } from '../../types/swiper';
 import { IBeginAndIsEndEvent } from '../../App';
 
-const slidesPerView = 3
+const SlidesPerView = 3
 
 interface Props {
     data: IData[]
@@ -21,6 +22,7 @@ interface Props {
     contentSwiperRef: RefObject<SwiperType | null>
     isBeginAndIsEndEvent: IBeginAndIsEndEvent
     setIsBeginAndIsEndEvent: React.Dispatch<React.SetStateAction<IBeginAndIsEndEvent>>
+    width: number
 }
 
 export const SwiperComponent = ({
@@ -28,12 +30,27 @@ export const SwiperComponent = ({
     contentRef,
     contentSwiperRef,
     setIsBeginAndIsEndEvent,
-    isBeginAndIsEndEvent
+    isBeginAndIsEndEvent,
+    width
 }: Props) => {
+    const [slidesPerView, setSlidesPerView] = useState(SlidesPerView)
+
     const [stage, setStage] = useState(0)
 
     const eventPrevRef = useRef<HTMLDivElement>(null);
     const eventNextRef = useRef<HTMLDivElement>(null);
+
+
+
+    useEffect(() => {
+        if (600 < width && width < 800) {
+            setSlidesPerView(2)
+        } 
+        else if (600 > width) {
+            setSlidesPerView(1.5)
+        }
+
+    }, [width])
 
     return (
         <div className={styles.events} ref={contentRef}>
@@ -48,15 +65,16 @@ export const SwiperComponent = ({
                         const end = stage < (data.length - (1 + slidesPerView))
                         setIsBeginAndIsEndEvent(prev => ({...prev, isBegin: start , isEnd: !end}))
                     }}
-                    navigation={{
+                    navigation={width > 600 ? {
                         prevEl: '.swiper-button-prev-custom',
                         nextEl: '.swiper-button-next-custom',
-                    }}
-                    spaceBetween={80}
+                    } : false}
+                    spaceBetween={width > 950 ? 80 : 25}
                     slidesPerView={slidesPerView}
                     freeMode={true}
                     watchSlidesProgress={true}
-                    modules={[FreeMode, Navigation, Thumbs]}
+                    modules={[FreeMode, Navigation, Thumbs, Pagination]}
+                    pagination={width <= 600 ? true : false}
                     
                 >
                 {

@@ -24,7 +24,6 @@
     align-items: center;
     gap: 80px;
     margin-top: 60px;
-    position: relative;
 }
 
 .events_btn {
@@ -46,4 +45,17 @@
 
 .events_btn__prev {
     transform: rotate(-180deg);
+}
+
+@media (min-width: 600px) {
+    .events {
+        position: relative;
+    }
+}
+
+@media (max-width: 600px) {
+    .events {
+        width: 100vw;
+        margin-top: 0;
+    }
 }

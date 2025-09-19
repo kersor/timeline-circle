@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 .swiper-button-prev-custom,
 .swiper-button-next-custom {
     position: absolute;
@@ -39,4 +41,22 @@
 .swiper-button-next-custom.disabled {
     opacity: 0;
     visibility: hidden;
+}
+
+@media (max-width: 600px) {
+    .swiper-button-prev-custom,
+    .swiper-button-next-custom {
+        display: none;
+    }
+}
+
+.swiper {
+    position: static !important;
+    --swiper-pagination-bottom: 18px;
+    --swiper-pagination-bullet-horizontal-gap: 5px;
+    --swiper-pagination-bullet-inactive-color: #42567A;
+    --swiper-pagination-bullet-inactive-opacity: 0.4;
+    --swiper-pagination-color: #42567A;
+    --swiper-pagination-bullet-width: 6px;
+    --swiper-pagination-bullet-height: 6px;
 }
