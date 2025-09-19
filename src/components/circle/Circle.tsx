@@ -68,7 +68,7 @@ const Circle = ({
                     onClick={() => handleNextAndPrev(i)}
                     >
                         <div className={styles.circle_item__border}></div> 
-                        <div className={styles.circle_item}></div>           {/* фон */}
+                        <div className={styles.circle_item}></div>           
                         <div className={styles.circle_item__content_number}>{++i}</div>
                         <div className={styles.circle_item__content_theme}>{item.theme}</div>
                     </div>
@@ -76,7 +76,7 @@ const Circle = ({
                 </div>
                 <div className={styles.date_wrapper}>
                     <div className={styles.date}>
-                        <span ref={minRef} className={styles.date_min}>{date.min}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span ref={minRef} className={styles.date_min}>{date.min}</span>
                         <span ref={maxRef} className={styles.date_max}>{date.max}</span>
                     </div>
                 </div>
